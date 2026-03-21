@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 const fetchMarkets = async () => {
   const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
-
   const data = await res.json();
 
   return data.filter((c) => c.symbol.endsWith("USDT")).slice(0, 10);
@@ -18,26 +17,45 @@ export default function MarketSidebar() {
 
   return (
     <div style={container}>
-      {data.map((c) => {
-        const coin = c.symbol.replace("USDT", "").toLowerCase();
+      <div style={header}>
+        <span>Pair</span>
+        <span>Last Price</span>
+        <span>24h Chg</span>
+      </div>
 
-        return (
-          <Link key={c.symbol} to={`/trade/${c.symbol}`} style={link}>
-            <div style={row}>
-              <div style={{ display: "flex", gap: "8px" }}>
-                <img
-                  src={`https://cryptoicons.org/api/icon/${coin}/24`}
-                  alt={coin}
-                />
+      <div style={list}>
+        {data.map((c) => {
+          const coin = c.symbol.replace("USDT", "").toLowerCase();
 
-                {c.symbol}
+          const change = Number(c.priceChangePercent).toFixed(2);
+
+          return (
+            <Link key={c.symbol} to={`/trade/${c.symbol}`} style={link}>
+              <div style={row}>
+                <div style={pair}>
+                  {/* <img
+                    src={`https://cryptoicons.org/api/icon/${coin}/20`}
+                    alt={coin}
+                    style={{ marginRight: 6 }}
+                  /> */}
+
+                  {c.symbol}
+                </div>
+
+                <span>{Number(c.lastPrice).toFixed(3)}</span>
+
+                <span
+                  style={{
+                    color: change > 0 ? "#16c784" : "#ea3943",
+                  }}
+                >
+                  {change}%
+                </span>
               </div>
-
-              <span>${Number(c.lastPrice).toFixed(2)}</span>
-            </div>
-          </Link>
-        );
-      })}
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -45,13 +63,33 @@ export default function MarketSidebar() {
 const container = {
   padding: "10px",
   borderLeft: "1px solid #1e1e1e",
-  overflowY: "scroll",
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+};
+
+const header = {
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr 1fr",
+  opacity: 0.6,
+  marginBottom: 6,
+};
+
+const list = {
+  overflowY: "auto",
+  flex: 1,
 };
 
 const row = {
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr 1fr",
+  padding: "6px 0",
+  fontSize: "13px",
+};
+
+const pair = {
   display: "flex",
-  justifyContent: "space-between",
-  padding: "8px 0",
+  alignItems: "center",
 };
 
 const link = {

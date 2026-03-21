@@ -1,51 +1,119 @@
-import { useEffect, useRef } from "react";
-import { createChart, CandlestickSeries } from "lightweight-charts";
+import { useEffect, useRef, useState } from "react";
+import {
+  createChart,
+  CandlestickSeries,
+  LineSeries,
+  BarSeries,
+} from "lightweight-charts";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchCandles = async (symbol) => {
   const res = await fetch(
     `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1m&limit=200`,
   );
-
   return res.json();
 };
 
 export default function Chart({ symbol }) {
-  const chartRef = useRef();
-  const seriesRef = useRef();
+  const chartContainer = useRef(null);
+  const chartRef = useRef(null);
+  const seriesRef = useRef(null);
+
+  const [chartType, setChartType] = useState("candlestick");
 
   const { data } = useQuery({
     queryKey: ["candles", symbol],
     queryFn: () => fetchCandles(symbol),
-    refetchInterval: 1000,
+    refetchInterval: 2000,
   });
 
+  // Create chart once
   useEffect(() => {
-    const chart = createChart(chartRef.current, {
+    const chart = createChart(chartContainer.current, {
       height: 500,
-      layout: { background: { color: "#0f1116" }, textColor: "#d1d4dc" },
+      width: chartContainer.current.clientWidth,
+      layout: {
+        background: { color: "#0f1116" },
+        textColor: "#d1d4dc",
+      },
+      grid: {
+        vertLines: { color: "#1f2937" },
+        horzLines: { color: "#1f2937" },
+      },
+      timeScale: {
+        timeVisible: true,
+      },
     });
 
-    const candleSeries = chart.addSeries(CandlestickSeries);
-
-    seriesRef.current = candleSeries;
+    chartRef.current = chart;
 
     return () => chart.remove();
   }, []);
 
+  // Change chart type
+  useEffect(() => {
+    if (!chartRef.current) return;
+
+    if (seriesRef.current) {
+      chartRef.current.removeSeries(seriesRef.current);
+    }
+
+    if (chartType === "candlestick") {
+      seriesRef.current = chartRef.current.addSeries(CandlestickSeries);
+    }
+
+    if (chartType === "line") {
+      seriesRef.current = chartRef.current.addSeries(LineSeries, {
+        color: "#2962FF",
+        lineWidth: 2,
+      });
+    }
+
+    if (chartType === "bar") {
+      seriesRef.current = chartRef.current.addSeries(BarSeries);
+    }
+  }, [chartType]);
+
+  // Update data
   useEffect(() => {
     if (!data || !seriesRef.current) return;
 
-    const candles = data.map((c) => ({
-      time: c[0] / 1000,
-      open: parseFloat(c[1]),
-      high: parseFloat(c[2]),
-      low: parseFloat(c[3]),
-      close: parseFloat(c[4]),
-    }));
+    let formattedData;
 
-    seriesRef.current.setData(candles);
-  }, [data]);
+    if (chartType === "line") {
+      formattedData = data.map((c) => ({
+        time: Math.floor(c[0] / 1000),
+        value: parseFloat(c[4]),
+      }));
+    } else {
+      formattedData = data.map((c) => ({
+        time: Math.floor(c[0] / 1000),
+        open: parseFloat(c[1]),
+        high: parseFloat(c[2]),
+        low: parseFloat(c[3]),
+        close: parseFloat(c[4]),
+      }));
+    }
 
-  return <div ref={chartRef} style={{ width: "100%", height: "500px" }} />;
+    seriesRef.current.setData(formattedData);
+  }, [data, chartType]);
+
+  return (
+    <div>
+      {/* Chart selector */}
+      <div style={{ marginBottom: "10px" }}>
+        <select
+          value={chartType}
+          onChange={(e) => setChartType(e.target.value)}
+        >
+          <option value="candlestick">Candlestick</option>
+          <option value="bar">Bar Chart</option>
+          <option value="line">Line Chart</option>
+        </select>
+      </div>
+
+      {/* Chart */}
+      <div ref={chartContainer} style={{ width: "100%", height: "500px" }} />
+    </div>
+  );
 }
