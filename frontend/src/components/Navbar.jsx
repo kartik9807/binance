@@ -1,8 +1,9 @@
+import React from "react";
 import { Search, Download, Globe, Moon, ChevronDown } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <div className="bg-[#1d2631] flex flex-row justify-between">
+    <div className="bg-slate-900 flex flex-row justify-between">
       <div className="flex flex-row justify-evenly px-2 items-center gap-2">
         <span className="w-28 h-xs">
           <img
@@ -19,15 +20,6 @@ const Navbar = () => {
           </li>
           <li className="flex flex-row">
             Futures <ChevronDown />
-          </li>
-          <li className="flex flex-row">
-            Earn <ChevronDown />
-          </li>
-          <li className="flex flex-row">
-            Square <ChevronDown />
-          </li>
-          <li className="flex flex-row">
-            More <ChevronDown />
           </li>
         </ul>
       </div>
