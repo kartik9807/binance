@@ -24,9 +24,9 @@ export default function Dashboard() {
     .slice(0, 100);
 
   return (
-    <div style={{ padding: "40px" }}>
+    <div className="bg-[#1d2631]">
       {/* Filter */}
-      <div style={{ marginBottom: "20px" }}>
+      <div>
         <select
           value={market}
           onChange={(e) => setMarket(e.target.value)}

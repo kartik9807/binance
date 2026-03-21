@@ -29,6 +29,6 @@ export const useMarketData = (market) => {
   return useQuery({
     queryKey: ["marketData", market],
     queryFn: () => fetchMarketData(market),
-    refetchInterval: 2000,
+    refetchInterval: 1000,
   });
 };

@@ -3,16 +3,14 @@ import { LayoutDashboard, Star, Wallet } from "lucide-react";
 
 export default function Sidebar() {
   return (
-    <div className="h-screen w-64 bg-gray-950 text-white flex flex-col border-r border-gray-800">
-
+    <div className="h-screen  bg-gray-950 text-white flex flex-col border-r border-gray-800">
       {/* Logo */}
       <div className="p-6 text-xl font-bold border-b border-gray-800">
         CryptoSim
       </div>
 
       {/* Navigation */}
-      <nav className="flex flex-col gap-2 p-4">
-
+      <nav className="flex flex-col gap-2 p-6">
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -54,14 +52,12 @@ export default function Sidebar() {
           <Wallet size={20} />
           Portfolio
         </NavLink>
-
       </nav>
 
       {/* Footer */}
       <div className="mt-auto p-4 border-t border-gray-800 text-sm text-gray-500">
         Dummy Trading Platform
       </div>
-
     </div>
   );
 }

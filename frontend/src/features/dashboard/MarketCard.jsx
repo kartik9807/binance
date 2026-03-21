@@ -1,12 +1,42 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useWatchlist } from "../../context/WatchlistContext";
 
-export default function MarketCard({ title, coins }) {
+async function fetchCoins(filter) {
+  const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
+  const data = await res.json();
+
+  return data.filter((coin) => coin.symbol.endsWith(filter));
+}
+
+export default function MarketCard({ title }) {
   const { watchlist, toggleWatchlist } = useWatchlist();
+  const [filter, setFilter] = useState("USDT");
+
+  const { data: coins = [] } = useQuery({
+    queryKey: ["marketCoins", filter],
+    queryFn: () => fetchCoins(filter),
+    refetchInterval: 1000,
+  });
 
   return (
-    <div className="bg-[#0f1116] p-5 rounded-[14px]  text-white">
-      <h3 className="mb-3 font-semibold">{title}</h3>
+    <div className="bg-[#0f1116] p-5 rounded-[14px] text-white">
+      {/* Title + Filter */}
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="font-semibold">{title}</h3>
+
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="bg-[#151821] text-sm px-2 py-1 rounded border border-[#1e1e1e]"
+        >
+          <option value="USDT">USDT</option>
+          <option value="BTC">BTC</option>
+          <option value="ETH">ETH</option>
+          <option value="BNB">BNB</option>
+        </select>
+      </div>
 
       {/* Header */}
       <div className="grid grid-cols-[2fr_1fr_1fr] opacity-60 mb-2 text-sm">
@@ -15,9 +45,9 @@ export default function MarketCard({ title, coins }) {
         <span>24h Change</span>
       </div>
 
-      {/* Coins */}
-      <div>
-        {coins.map((coin, i) => {
+      {/* Coin List */}
+      <div className="max-h-[520px] overflow-y-auto scrollbar-hide">
+        {coins.slice(0, 20).map((coin, i) => {
           const change = Number(coin.priceChangePercent).toFixed(2);
 
           const coinSymbol = coin.symbol
@@ -36,12 +66,10 @@ export default function MarketCard({ title, coins }) {
               className="no-underline text-inherit"
             >
               <div className="grid grid-cols-[2fr_1fr_1fr] items-center p-2.5 cursor-pointer border-b border-[#1e1e1e] hover:bg-[#151821] transition">
-                {/* Name Section */}
+                {/* Name */}
                 <div className="flex items-center gap-3">
-                  {/* Rank */}
                   <span className="w-5 text-gray-400">{i + 1}</span>
 
-                  {/* Watchlist Star */}
                   <span
                     onClick={(e) => {
                       e.preventDefault();
@@ -52,14 +80,12 @@ export default function MarketCard({ title, coins }) {
                     {isSaved ? "⭐" : "☆"}
                   </span>
 
-                  {/* Coin Icon */}
                   <img
                     src={`https://cryptoicons.org/api/icon/${coinSymbol}/24`}
                     alt={coinSymbol}
                     className="w-5 h-5"
                   />
 
-                  {/* Coin Name */}
                   <span className="font-medium">{coin.symbol}</span>
                 </div>
 
@@ -68,13 +94,9 @@ export default function MarketCard({ title, coins }) {
                   ${Number(coin.lastPrice).toFixed(4)}
                 </span>
 
-                {/* 24h Change */}
+                {/* Change */}
                 <span
-                  className={
-                    change > 0
-                      ? "text-[#16c784] tabular-nums"
-                      : "text-[#ea3943] tabular-nums"
-                  }
+                  className={change > 0 ? "text-[#16c784]" : "text-[#ea3943]"}
                 >
                   {change}%
                 </span>

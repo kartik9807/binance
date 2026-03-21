@@ -11,12 +11,12 @@ export default function AppLayout() {
       </header>
 
       {/* Main Body */}
-      <div className="grid grid-cols-[220px_1fr]">
+      <div className="grid grid-cols-[300px_1fr]">
         {/* Sidebar */}
         <Sidebar />
 
         {/* Page Content */}
-        <main className="p-6 overflow-y-auto bg-gray-100">
+        <main className=" overflow-y-auto bg-gray-100">
           <Outlet />
         </main>
       </div>
