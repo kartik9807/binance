@@ -12,6 +12,7 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 import AppLayout from "./ui/AppLayout";
 import { TradeProvider } from "./context/TradeContext";
 import Portfolio from "./pages/Portfolio";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +29,9 @@ function App() {
       <TradeProvider>
         <WatchlistProvider>
           <BrowserRouter>
+            {/* ✅ Toast container */}
+            <Toaster position="top-right" reverseOrder={false} />
+
             <Routes>
               {/* Redirect */}
               <Route path="/" element={<Navigate to="/dashboard" />} />
@@ -53,6 +57,7 @@ function App() {
           </BrowserRouter>
         </WatchlistProvider>
       </TradeProvider>
+
       <ReactQueryDevtools />
     </QueryClientProvider>
   );

@@ -1,24 +1,13 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useWatchlist } from "../../context/WatchlistContext";
-
-async function fetchCoins(filter) {
-  const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
-  const data = await res.json();
-
-  return data.filter((coin) => coin.symbol.endsWith(filter));
-}
+import { useMarketData } from "../../hooks/useMarketData";
 
 export default function MarketCard({ title }) {
   const { watchlist, toggleWatchlist } = useWatchlist();
-  const [filter, setFilter] = useState("USDT");
+  const [filter, setFilter] = useState("CRYPTO");
 
-  const { data: coins = [] } = useQuery({
-    queryKey: ["marketCoins", filter],
-    queryFn: () => fetchCoins(filter),
-    refetchInterval: 1000,
-  });
+  const { data: coins = [], isLoading } = useMarketData(filter);
 
   return (
     <div className="bg-[#0f1116] p-5 rounded-[14px] text-white">
@@ -31,7 +20,7 @@ export default function MarketCard({ title }) {
           onChange={(e) => setFilter(e.target.value)}
           className="bg-[#151821] text-sm px-2 py-1 rounded border border-[#1e1e1e]"
         >
-          <option value="USDT">USDT</option>
+          <option value="CRYPTO">USDT</option>
           <option value="BTC">BTC</option>
           <option value="ETH">ETH</option>
           <option value="BNB">BNB</option>
@@ -47,6 +36,8 @@ export default function MarketCard({ title }) {
 
       {/* Coin List */}
       <div className="max-h-[520px] overflow-y-auto scrollbar-hide">
+        {isLoading && <p className="text-gray-400">Loading...</p>}
+
         {coins.slice(0, 20).map((coin, i) => {
           const change = Number(coin.priceChangePercent).toFixed(2);
 
@@ -66,7 +57,6 @@ export default function MarketCard({ title }) {
               className="no-underline text-inherit"
             >
               <div className="grid grid-cols-[2fr_1fr_1fr] items-center p-2.5 cursor-pointer border-b border-[#1e1e1e] hover:bg-[#151821] transition">
-                {/* Name */}
                 <div className="flex items-center gap-3">
                   <span className="w-5 text-gray-400">{i + 1}</span>
 
@@ -89,12 +79,10 @@ export default function MarketCard({ title }) {
                   <span className="font-medium">{coin.symbol}</span>
                 </div>
 
-                {/* Price */}
                 <span className="tabular-nums">
                   ${Number(coin.lastPrice).toFixed(4)}
                 </span>
 
-                {/* Change */}
                 <span
                   className={change > 0 ? "text-[#16c784]" : "text-[#ea3943]"}
                 >

@@ -4,11 +4,10 @@ import Sidebar from "./Sidebar";
 
 export default function AppLayout() {
   return (
-    <div className="h-screen grid grid-rows-[60px_1fr]">
+    <div className="h-screen grid grid-rows-[100px_1fr]">
       {/* Navbar */}
-      <header className="bg-gray-800 text-white flex items-center px-6">
-        <Navbar />
-      </header>
+
+      <Navbar />
 
       {/* Main Body */}
       <div className="grid grid-cols-[300px_1fr]">

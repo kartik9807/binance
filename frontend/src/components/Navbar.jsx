@@ -1,37 +1,52 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Search, Download, Globe, Moon, ChevronDown } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <div className="bg-slate-900 flex flex-row justify-between">
-      <div className="flex flex-row justify-evenly px-2 items-center gap-2">
-        <span className="w-28 h-xs">
+    <div className="bg-[#1c242f] flex justify-between items-center h-28 px-6">
+      {/* Left Section */}
+      <div className="flex items-center gap-6">
+        <span className="w-36">
           <img
             src="https://www.logo.wine/a/logo/Binance/Binance-Horizontal2-Dark-Background-Logo.wine.svg"
             alt="logo"
-            className="w-full object-cover"
+            className="w-full object-contain"
           />
         </span>
-        <ul className="list-none text-white text-md flex flex-row justify-evenly font-semibold gap-6 cursor-pointer">
-          <li>Buy Crypto</li>
-          <li>Markets</li>
-          <li className="flex flex-row">
-            Trade <ChevronDown />
+
+        <ul className="flex items-center gap-6 text-white text-lg font-semibold cursor-pointer">
+          <li className="hover:text-yellow-400">Buy Crypto</li>
+          <li className="hover:text-yellow-400">Markets</li>
+
+          <li className="flex items-center gap-1 hover:text-yellow-400">
+            Trade <ChevronDown size={18} />
           </li>
-          <li className="flex flex-row">
-            Futures <ChevronDown />
+
+          <li className="flex items-center gap-1 hover:text-yellow-400">
+            Futures <ChevronDown size={18} />
           </li>
         </ul>
       </div>
-      <div className="flex items-center gap-4 px-2">
+
+      {/* Right Section */}
+      <div className="flex items-center gap-5">
         <Search className="w-5 h-5 cursor-pointer text-white hover:text-yellow-400" />
-        <button className="px-3 py-1 cursor-pointer border-slate-900 rounded-lg bg-slate-700 text-white">
-          Log In
-        </button>
-        <button className="px-4 py-1 cursor-pointer bg-yellow-400 text-black rounded">
-          {" "}
-          Sign Up
-        </button>
+
+        {/* Login Button */}
+        <Link to="/login">
+          <button className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600">
+            Log In
+          </button>
+        </Link>
+
+        {/* Signup Button */}
+        <Link to="/signup">
+          <button className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-300">
+            Sign Up
+          </button>
+        </Link>
+
         <Download className="w-5 h-5 cursor-pointer text-white hover:text-yellow-400" />
         <Globe className="w-5 h-5 cursor-pointer text-white hover:text-yellow-400" />
         <Moon className="w-5 h-5 cursor-pointer text-white hover:text-yellow-400" />
