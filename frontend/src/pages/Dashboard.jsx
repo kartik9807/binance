@@ -39,13 +39,10 @@ export default function Dashboard() {
         </select>
       </div>
 
-      <div style={{ display: "flex", gap: "30px" }}>
+      <div className="grid grid-cols-2 gap-6">
         <MarketCard title="Hot Coins" coins={hot} />
-
         <MarketCard title="Top Gainers" coins={gainers} />
-
         <MarketCard title="Top Losers" coins={losers} />
-
         <MarketCard title="Top Volume" coins={volume} />
       </div>
     </div>
