@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "./Sidebar";
+import Chatbot from "../features/ai/Chatbot";
 
 export default function AppLayout() {
   return (
     <div className="h-screen grid grid-rows-[100px_1fr]">
       {/* Navbar */}
-
       <Navbar />
 
       {/* Main Body */}
@@ -19,6 +19,9 @@ export default function AppLayout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Chatbot (floating on entire app) */}
+      <Chatbot />
     </div>
   );
 }
