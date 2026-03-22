@@ -1,10 +1,33 @@
 import { useRef } from "react";
 import { useExecuteTrade } from "../../hooks/useExecuteTrade";
+import emailjs from "@emailjs/browser";
 
 export default function TradePanel({ symbol, price }) {
   const amountRef = useRef();
-
   const { mutate } = useExecuteTrade();
+
+  // get user email stored during signup
+  const email = localStorage.getItem("email");
+
+  // send email function
+  const sendTradeEmail = async (side, quantity) => {
+    try {
+      await emailjs.send(
+        "service_zp4z0jm",
+        "template_z6y1elb",
+        {
+          to_email: email,
+          symbol: symbol,
+          price: price,
+          quantity: quantity,
+          side: side,
+        },
+        "La3s4DTcTfPlyJTGx",
+      );
+    } catch (error) {
+      console.error("EmailJS error:", error);
+    }
+  };
 
   const handleBuy = () => {
     const amount = Number(amountRef.current.value);
@@ -17,6 +40,9 @@ export default function TradePanel({ symbol, price }) {
       quantity: amount,
       side: "BUY",
     });
+
+    // send email
+    sendTradeEmail("BUY", amount);
 
     amountRef.current.value = "";
   };
@@ -32,6 +58,9 @@ export default function TradePanel({ symbol, price }) {
       quantity: amount,
       side: "SELL",
     });
+
+    // send email
+    sendTradeEmail("SELL", amount);
 
     amountRef.current.value = "";
   };

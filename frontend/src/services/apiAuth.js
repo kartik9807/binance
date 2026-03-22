@@ -5,6 +5,7 @@ export async function signupAccount(data) {
     "http://127.0.0.1:5000/api/v1/users/signup",
     data,
   );
+  console.log(res);
   return res.data;
 }
 

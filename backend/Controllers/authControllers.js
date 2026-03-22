@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 
 exports.signup = async (req, res) => {
   try {
-    const { firebaseToken } = req.body;
+    const { firebaseToken, email } = req.body;
 
     const decoded = await admin.auth().verifyIdToken(firebaseToken);
 
@@ -17,6 +17,7 @@ exports.signup = async (req, res) => {
     if (!user) {
       user = await User.create({
         phoneNumber,
+        email,
         createdAt: new Date(),
       });
 
