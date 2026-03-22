@@ -1,5 +1,6 @@
-const app = require("./app");
 const dotenv = require("dotenv");
+dotenv.config({ path: `./config.env` });
+const app = require("./app");
 const mongoose = require("mongoose");
 // const Email = require("./utils/email");
 // console.log("printing", typeof Email);
@@ -8,7 +9,7 @@ const mongoose = require("mongoose");
 //   "789000",
 //   "signup"
 // );
-dotenv.config({ path: `./config.env` });
+
 const DB = process.env.DB.replace("<password>", process.env.DB_PASSWORD);
 // console.log(
 //   new Email({ email: "undefined", name: "undefined" }, "789000", "signup")
