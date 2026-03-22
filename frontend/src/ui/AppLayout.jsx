@@ -1,8 +1,7 @@
-
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "./Sidebar";
-import AIWidget from "../features/ai/AiWidget";
+import Chatbot from "../features/ai/Chatbot";
 
 export default function AppLayout() {
   return (
@@ -11,18 +10,18 @@ export default function AppLayout() {
       <Navbar />
 
       {/* Main Body */}
-      <div className="grid grid-cols-[300px_1fr] relative">
+      <div className="grid grid-cols-[300px_1fr]">
         {/* Sidebar */}
         <Sidebar />
-        <AIWidget />
-        {/* Page Content */}
-        <main className="h-screen overflow-y-auto bg-gray-100 relative">
-          <Outlet />
 
-          {/* AI Widget button & panel inside main so it's aligned with content */}
-          
+        {/* Page Content */}
+        <main className="h-screen overflow-y-auto bg-gray-100">
+          <Outlet />
         </main>
       </div>
+
+      {/* Chatbot (floating on entire app) */}
+      <Chatbot />
     </div>
   );
 }

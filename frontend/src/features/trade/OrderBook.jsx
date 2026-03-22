@@ -13,40 +13,44 @@ export default function OrderBook({ symbol }) {
     queryFn: () => fetchDepth(symbol),
     refetchInterval: 1000,
   });
+
   if (!data) return null;
+
   let total = 0;
+
   return (
-    <div className="h-full flex flex-col text-xs">
-      <h3 className="text-sm font-semibold mb-3 text-gray-300">
-        Order Book
-      </h3>
-      <div className="grid grid-cols-3 text-gray-500 mb-2">
-        <span>Price</span>
+    <div style={container}>
+      <h3 style={{ marginBottom: 10 }}>Order Book</h3>
+
+      <div style={header}>
+        <span>Price (USDT)</span>
         <span>Amount</span>
         <span>Total</span>
       </div>
-      <div className="flex-1 overflow-y-auto space-y-[2px]">
-        {data.asks.slice(0, 10).map((a, i) => {
-          total += parseFloat(a[1]);
-          return (
-            <div key={i} className="grid grid-cols-3 text-red-400">
-              <span>{a[0]}</span>
-              <span className="text-gray-300">{a[1]}</span>
-              <span className="text-gray-400">{total.toFixed(3)}</span>
-            </div>
-          );
-        })}
-        {data.bids.slice(0, 10).map((b, i) => {
-          total += parseFloat(b[1]);
-          return (
-            <div key={i} className="grid grid-cols-3 text-green-400">
-              <span>{b[0]}</span>
-              <span className="text-gray-300">{b[1]}</span>
-              <span className="text-gray-400">{total.toFixed(3)}</span>
-            </div>
-          );
-        })}
-      </div>
+
+      {data.asks.slice(0, 10).map((a, i) => {
+        total += parseFloat(a[1]);
+
+        return (
+          <div key={i} style={row}>
+            <span style={{ color: "#ea3943" }}>{a[0]}</span>
+            <span>{a[1]}</span>
+            <span>{total.toFixed(3)}</span>
+          </div>
+        );
+      })}
+
+      {data.bids.slice(0, 10).map((b, i) => {
+        total += parseFloat(b[1]);
+
+        return (
+          <div key={i} style={row}>
+            <span style={{ color: "#16c784" }}>{b[0]}</span>
+            <span>{b[1]}</span>
+            <span>{total.toFixed(3)}</span>
+          </div>
+        );
+      })}
     </div>
   );
 }

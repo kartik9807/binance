@@ -28,9 +28,9 @@ const Navbar = () => {
           <li className="hover:text-yellow-400">Buy Crypto</li>
           <li className="hover:text-yellow-400">Markets</li>
 
-         <Link to="/trade/:symbol"> <li className="flex items-center gap-1 hover:text-yellow-400">
+          <li className="flex items-center gap-1 hover:text-yellow-400">
             Trade <ChevronDown size={18} />
-          </li></Link>
+          </li>
 
           <li className="flex items-center gap-1 hover:text-yellow-400">
             Futures <ChevronDown size={18} />

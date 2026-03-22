@@ -101,3 +101,21 @@ exports.getAllUsers = async (req, res) => {
     });
   }
 };
+
+exports.deleteAllUsers = async (req, res) => {
+  try {
+    const result = await User.deleteMany({});
+
+    res.status(200).json({
+      status: "success",
+      message: "All users deleted successfully",
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Failed to delete users",
+      error: error.message,
+    });
+  }
+};

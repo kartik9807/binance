@@ -1,25 +1,35 @@
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
 
 export default function WinRateChart({ winningTrades, losingTrades }) {
   const data = [
-    { name: "Win", value: winningTrades },
-    { name: "Loss", value: losingTrades },
+    { name: "Winning Trades", value: winningTrades },
+    { name: "Losing Trades", value: losingTrades },
   ];
-
-  const COLORS = ["#22c55e", "#ef4444"];
 
   return (
     <div className="bg-gray-900 p-4 rounded-lg">
-      <h3 className="mb-4 text-lg">Win vs Loss</h3>
+      <h3 className="text-lg mb-4">Win / Loss Comparison</h3>
 
-      <PieChart width={400} height={300}>
-        <Pie data={data} dataKey="value" outerRadius={100}>
-          {data.map((entry, index) => (
-            <Cell key={index} fill={COLORS[index]} />
-          ))}
-        </Pie>
-        <Tooltip />
-      </PieChart>
+      <ResponsiveContainer width="100%" height={250}>
+        <BarChart data={data} layout="vertical">
+          <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+
+          <XAxis type="number" stroke="#aaa" />
+          <YAxis type="category" dataKey="name" stroke="#aaa" />
+
+          <Tooltip />
+
+          <Bar dataKey="value" fill="#16c784" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }
