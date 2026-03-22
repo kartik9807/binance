@@ -1,3 +1,4 @@
+
 import { useMarketTicker } from "../../hooks/useMarketTicker";
 
 export default function PairHeader({ symbol }) {
@@ -13,13 +14,9 @@ export default function PairHeader({ symbol }) {
         <img
           src={`https://cryptoicons.org/api/icon/${coin}/32`}
           alt={coin}
-          style={{ width: 30 }}
-        />
-
+          style={{ width: 30 }}/>
         <h2>{symbol}</h2>
-
         <span>${Number(data.lastPrice).toFixed(2)}</span>
-
         <span
           style={{
             color: data.priceChangePercent > 0 ? "#16c784" : "#ea3943",
@@ -28,7 +25,6 @@ export default function PairHeader({ symbol }) {
           {Number(data.priceChangePercent).toFixed(2)}%
         </span>
       </div>
-
       <div style={stats}>
         <Stat label="24h High" value={Number(data.highPrice).toFixed(2)} />
         <Stat label="24h Low" value={Number(data.lowPrice).toFixed(2)} />

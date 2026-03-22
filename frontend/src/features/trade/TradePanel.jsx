@@ -37,7 +37,7 @@ export default function TradePanel({ symbol, price }) {
   };
 
   return (
-    <div className="bg-gray-900 rounded-xl p-6 w-80 space-y-6">
+    <div className="bg-gray-900 rounded-xl p-6 w-full space-y-6">
       <div className="text-lg font-semibold">Price: ${price}</div>
 
       <input
