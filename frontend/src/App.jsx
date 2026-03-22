@@ -13,6 +13,7 @@ import Portfolio from "./pages/Portfolio";
 import { Toaster } from "react-hot-toast";
 import Reports from "./pages/Reports";
 import Notifications from "./pages/Notification";
+import Market from "./pages/Market";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,6 +38,7 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/market" element={<Market />} />
 
           {/* Protected Routes */}
           <Route

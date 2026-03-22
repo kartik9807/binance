@@ -1,6 +1,6 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Search, Download, Globe, Moon, ChevronDown, User } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Search, User } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -25,23 +25,21 @@ const Navbar = () => {
         </span>
 
         <ul className="flex items-center gap-6 text-white text-lg font-semibold cursor-pointer">
-          <li className="hover:text-yellow-400">Buy Crypto</li>
-          <li className="hover:text-yellow-400">Markets</li>
-
-          <li className="flex items-center gap-1 hover:text-yellow-400">
-            Trade <ChevronDown size={18} />
-          </li>
-
-          <li className="flex items-center gap-1 hover:text-yellow-400">
-            Futures <ChevronDown size={18} />
+          <li>
+            <NavLink
+              to="/market"
+              className={({ isActive }) =>
+                `hover:text-yellow-400 ${isActive ? "text-yellow-400" : "text-white"}`
+              }
+            >
+              Markets
+            </NavLink>
           </li>
         </ul>
       </div>
 
       {/* Right Section */}
       <div className="flex items-center gap-5">
-        <Search className="w-5 h-5 cursor-pointer text-white hover:text-yellow-400" />
-
         {!user ? (
           <>
             {/* Login */}
@@ -67,10 +65,6 @@ const Navbar = () => {
             />
           </div>
         )}
-
-        <Download className="w-5 h-5 cursor-pointer text-white hover:text-yellow-400" />
-        <Globe className="w-5 h-5 cursor-pointer text-white hover:text-yellow-400" />
-        <Moon className="w-5 h-5 cursor-pointer text-white hover:text-yellow-400" />
       </div>
     </div>
   );
