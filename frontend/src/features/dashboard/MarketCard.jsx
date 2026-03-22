@@ -52,6 +52,11 @@ export default function MarketCard({ title }) {
             ?.replace("BNB", "")
             ?.toLowerCase();
 
+          const iconSources = [
+            `https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/svg/color/${coinSymbol}.svg`,
+            `https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/svg/white/${coinSymbol}.svg`,
+            `https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/16/${coinSymbol}.png`,
+          ];
           const isSaved = watchlist.includes(coin.symbol);
 
           return (
@@ -78,9 +83,18 @@ export default function MarketCard({ title }) {
 
                   {/* Coin icon */}
                   <img
-                    src={`https://cryptoicons.org/api/icon/${coinSymbol}/24`}
+                    src={iconSources[0]}
                     alt={coinSymbol}
-                    className="w-5 h-5"
+                    className="h-4 w-4"
+                    onError={(e) => {
+                      const sources = iconSources;
+                      const currentIndex = sources.indexOf(e.target.src);
+                      if (currentIndex < sources.length - 1) {
+                        e.target.src = sources[currentIndex + 1]; // try next source
+                      } else {
+                        e.target.src = `https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/svg/color/generic.svg`;
+                      }
+                    }}
                   />
 
                   <span className="font-medium">{coin.symbol}</span>

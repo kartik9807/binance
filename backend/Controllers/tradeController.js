@@ -86,22 +86,53 @@ exports.executeTrade = async (req, res) => {
   }
 };
 
+const axios = require("axios");
+
 exports.getPortfolio = async (req, res) => {
   try {
     const { firebaseToken } = req.body;
 
     const decoded = await admin.auth().verifyIdToken(firebaseToken);
-
     const phoneNumber = decoded.phone_number;
 
     const user = await User.findOne({ phoneNumber });
 
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Convert Map → Object
+    const positions = Object.fromEntries(user.positions || new Map());
+
+    const symbols = Object.keys(positions);
+
+    let prices = {};
+
+    if (symbols.length > 0) {
+      const responses = await Promise.all(
+        symbols.map((symbol) =>
+          axios.get(
+            `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`,
+          ),
+        ),
+      );
+
+      responses.forEach((r, i) => {
+        prices[symbols[i]] = Number(r.data.price);
+      });
+    }
+
     res.status(200).json({
-      balance: user.balance,
-      positions: user.positions,
-      trades: user.trades,
+      balance: user.balance || 0,
+      positions,
+      trades: user.trades || [],
+      prices,
     });
   } catch (err) {
+    console.error(err);
+
     res.status(500).json({
       message: err.message,
     });

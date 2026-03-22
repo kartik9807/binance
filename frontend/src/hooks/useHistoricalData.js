@@ -18,6 +18,6 @@ export function useHistoricalData(symbol) {
   return useQuery({
     queryKey: ["history", symbol],
     queryFn: () => fetchHistorical(symbol),
-    refetchInterval: 60000,
+    refetchInterval: 10000,
   });
 }

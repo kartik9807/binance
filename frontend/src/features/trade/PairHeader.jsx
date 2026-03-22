@@ -7,13 +7,32 @@ export default function PairHeader({ symbol }) {
 
   const coin = symbol.replace("USDT", "").toLowerCase();
 
+  const iconSources = [
+    `https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/svg/color/${coin}.svg`,
+    `https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/svg/white/${coin}.svg`,
+    `https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/16/${coin}.png`,
+  ];
+
+  const handleError = (e) => {
+    const currentSrc = e.target.src;
+    const index = iconSources.findIndex((src) => currentSrc.includes(src));
+
+    if (index !== -1 && index < iconSources.length - 1) {
+      e.target.src = iconSources[index + 1];
+    } else {
+      e.target.src =
+        "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@master/svg/color/generic.svg";
+    }
+  };
+
   return (
     <div style={container}>
       <div style={pairSection}>
         <img
-          src={`https://cryptoicons.org/api/icon/${coin}/32`}
+          src={iconSources[0]}
           alt={coin}
-          style={{ width: 30 }}
+          className="h-4 w-4"
+          onError={handleError}
         />
 
         <h2>{symbol}</h2>
