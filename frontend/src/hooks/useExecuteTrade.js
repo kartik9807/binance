@@ -7,7 +7,7 @@ export function useExecuteTrade() {
     mutationFn: executeTrade,
 
     onSuccess: () => {
-      toast.success("Trade executed");
+      toast.success("Trade executed and email sent for the trade made");
     },
 
     onError: (err) => {

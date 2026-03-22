@@ -1,39 +1,28 @@
 import { useRef } from "react";
 import { useExecuteTrade } from "../../hooks/useExecuteTrade";
-import emailjs from "@emailjs/browser";
+import { sendTradeEmail } from "../../utils/sendTradeEmail";
 
 export default function TradePanel({ symbol, price }) {
   const amountRef = useRef();
   const { mutate } = useExecuteTrade();
 
-  // get user email stored during signup
+  // get email saved during signup
   const email = localStorage.getItem("email");
-
-  // send email function
-  const sendTradeEmail = async (side, quantity) => {
-    try {
-      await emailjs.send(
-        "service_zp4z0jm",
-        "template_z6y1elb",
-        {
-          to_email: email,
-          symbol: symbol,
-          price: price,
-          quantity: quantity,
-          side: side,
-        },
-        "La3s4DTcTfPlyJTGx",
-      );
-    } catch (error) {
-      console.error("EmailJS error:", error);
-    }
-  };
 
   const handleBuy = () => {
     const amount = Number(amountRef.current.value);
 
     if (!amount) return;
 
+    const tradeData = {
+      crypto_symbol: symbol,
+      price: price,
+      quantity: amount,
+      type_currency: "buy",
+      email: email,
+    };
+
+    // execute trade
     mutate({
       symbol,
       price,
@@ -42,7 +31,7 @@ export default function TradePanel({ symbol, price }) {
     });
 
     // send email
-    sendTradeEmail("BUY", amount);
+    sendTradeEmail(tradeData);
 
     amountRef.current.value = "";
   };
@@ -52,6 +41,15 @@ export default function TradePanel({ symbol, price }) {
 
     if (!amount) return;
 
+    const tradeData = {
+      crypto_symbol: symbol,
+      price: price,
+      quantity: amount,
+      type_currency: "sell",
+      email: email,
+    };
+
+    // execute trade
     mutate({
       symbol,
       price,
@@ -60,7 +58,7 @@ export default function TradePanel({ symbol, price }) {
     });
 
     // send email
-    sendTradeEmail("SELL", amount);
+    sendTradeEmail(tradeData);
 
     amountRef.current.value = "";
   };

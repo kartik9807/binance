@@ -29,7 +29,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         {/* ✅ Toast container */}
-        <Toaster position="top-right" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
 
         <Routes>
           {/* Redirect */}

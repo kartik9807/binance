@@ -1,94 +1,7 @@
-import { useState, useEffect } from "react";
 import { useNotifications } from "../hooks/useNotification";
-import axios from "axios";
-import { getAuth } from "firebase/auth";
 
 export default function Notifications() {
   const { notifications, markRead, isLoading } = useNotifications();
-
-  const [email, setEmail] = useState("");
-  const [hasEmail, setHasEmail] = useState(null);
-  const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    const checkEmail = async () => {
-      try {
-        const user = getAuth().currentUser;
-        if (!user) return;
-
-        const firebaseToken = await user.getIdToken();
-        console.log(firebaseToken);
-
-        const res = await axios.post(
-          "http://127.0.0.1:5000/api/v1/users/getMe",
-          { firebaseToken },
-        );
-
-        console.log(res);
-
-        if (res.data.email) {
-          setHasEmail(true);
-        } else {
-          setHasEmail(false);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    checkEmail();
-  }, []);
-
-  const saveEmail = async () => {
-    if (!email) return;
-
-    try {
-      setSaving(true);
-
-      const user = getAuth().currentUser;
-      const firebaseToken = await user.getIdToken();
-
-      await axios.post("http://127.0.0.1:5000/api/v1/users/add-email", {
-        firebaseToken,
-        email,
-      });
-
-      setHasEmail(true);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  if (hasEmail === null) {
-    return <div className="p-6">Loading...</div>;
-  }
-
-  // Ask email if not stored
-  if (!hasEmail) {
-    return (
-      <div className="p-6 max-w-md mx-auto space-y-4 bg-[#151d27]">
-        <h1 className="text-xl font-bold">Enter Email for Notifications</h1>
-
-        <input
-          type="email"
-          placeholder="Enter your email"
-          className="border p-2 rounded w-full"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <button
-          onClick={saveEmail}
-          disabled={saving}
-          className="bg-blue-500 text-white px-4 py-2 rounded w-full"
-        >
-          {saving ? "Saving..." : "Save Email"}
-        </button>
-      </div>
-    );
-  }
 
   if (isLoading) {
     return <div className="p-6">Loading notifications...</div>;
@@ -113,7 +26,7 @@ export default function Notifications() {
             ${n.isRead ? "bg-green-200" : "bg-red-200"}`}
           >
             <div>
-              <p className="">{n.message}</p>
+              <p>{n.message}</p>
               <p className="text-black">
                 {new Date(n.createdAt).toLocaleString()}
               </p>
